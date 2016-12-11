@@ -6,11 +6,16 @@ set -e
 cd $(dirname $0)
 
 #remove all stopped docker sessions
-docker rm -v $(docker ps -a -q -f status=exited)
+sessions=$(docker ps -a -q -f status=exited)
+if [ "x$session" != "x" ]; then
+    docker rm -v $(docker ps -a -q -f status=exited)
+fi
 
 #Remove dangling images
-docker rmi $(docker images -f "dangling=true" -q)
-
+images=$(docker images -f "dangling=true" -q)
+if [ "x$images" != "x" ]; then
+    docker rmi $(docker images -f "dangling=true" -q)
+fi
 
 #Ubuntu with general packages for building
 docker build --tag edison/ubuntu-build ubuntu-build
