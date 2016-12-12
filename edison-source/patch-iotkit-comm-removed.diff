@@ -1,0 +1,268 @@
+ meta-intel-edison/meta-intel-edison-distro/recipes-core/images/edison-image.bb        |    2 
+ meta-intel-iot-devkit/recipes-devtools/iotkit-comm-js/files/iotkit-comm-js.mdns.patch |   13 -
+ meta-intel-iot-devkit/recipes-devtools/iotkit-comm-js/iotkit-comm-js_%.bbappend       |   11 
+ meta-intel-iot-middleware/recipes-devtools/iotkit-comm-c/iotkit-comm-c_0.1.1.bb       |  111 ----------
+ meta-intel-iot-middleware/recipes-devtools/iotkit-comm-js/iotkit-comm-js_0.2.0.bb     |   99 --------
+ 5 files changed, 236 deletions(-)
+diff -Naur iot-devkit-yp-poky-edison-20160606.orig/poky/meta-intel-edison/meta-intel-edison-distro/recipes-core/images/edison-image.bb iot-devkit-yp-poky-edison-20160606/poky/meta-intel-edison/meta-intel-edison-distro/recipes-core/images/edison-image.bb
+--- iot-devkit-yp-poky-edison-20160606.orig/poky/meta-intel-edison/meta-intel-edison-distro/recipes-core/images/edison-image.bb	2016-05-11 21:56:50.000000000 +0200
++++ iot-devkit-yp-poky-edison-20160606/poky/meta-intel-edison/meta-intel-edison-distro/recipes-core/images/edison-image.bb	2016-12-11 23:03:12.291043813 +0100
+@@ -139,8 +139,6 @@
+ IMAGE_INSTALL += "cppzmq-dev"
+ IMAGE_INSTALL += "paho-mqtt-dev"
+ IMAGE_INSTALL += "mdns-dev"
+-IMAGE_INSTALL += "iotkit-comm-js"
+-IMAGE_INSTALL += "iotkit-comm-c-dev"
+ IMAGE_INSTALL += "iotkit-agent"
+ IMAGE_INSTALL += "iotkit-lib-c-dev"
+ IMAGE_INSTALL += "xdk-daemon"
+diff -Naur iot-devkit-yp-poky-edison-20160606.orig/poky/meta-intel-iot-devkit/recipes-devtools/iotkit-comm-js/files/iotkit-comm-js.mdns.patch iot-devkit-yp-poky-edison-20160606/poky/meta-intel-iot-devkit/recipes-devtools/iotkit-comm-js/files/iotkit-comm-js.mdns.patch
+--- iot-devkit-yp-poky-edison-20160606.orig/poky/meta-intel-iot-devkit/recipes-devtools/iotkit-comm-js/files/iotkit-comm-js.mdns.patch	2016-05-24 17:10:44.000000000 +0200
++++ iot-devkit-yp-poky-edison-20160606/poky/meta-intel-iot-devkit/recipes-devtools/iotkit-comm-js/files/iotkit-comm-js.mdns.patch	1970-01-01 01:00:00.000000000 +0100
+@@ -1,13 +0,0 @@
+-diff --git a/package.json b/package.json
+-index 2b65c3f..bd1855f 100644
+---- a/package.json
+-+++ b/package.json
+-@@ -17,7 +17,7 @@
+-   },
+-   "repository": "",
+-   "dependencies": {
+--    "mdns2": ">=2.1.3",
+-+    "mdns": ">=2.1.3",
+-     "mqtt": "0.3.13",
+-     "zmq": ">=2.6.0",
+-     "commander": "*",
+diff -Naur iot-devkit-yp-poky-edison-20160606.orig/poky/meta-intel-iot-devkit/recipes-devtools/iotkit-comm-js/iotkit-comm-js_%.bbappend iot-devkit-yp-poky-edison-20160606/poky/meta-intel-iot-devkit/recipes-devtools/iotkit-comm-js/iotkit-comm-js_%.bbappend
+--- iot-devkit-yp-poky-edison-20160606.orig/poky/meta-intel-iot-devkit/recipes-devtools/iotkit-comm-js/iotkit-comm-js_%.bbappend	2016-05-24 17:10:44.000000000 +0200
++++ iot-devkit-yp-poky-edison-20160606/poky/meta-intel-iot-devkit/recipes-devtools/iotkit-comm-js/iotkit-comm-js_%.bbappend	1970-01-01 01:00:00.000000000 +0100
+@@ -1,11 +0,0 @@
+-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+-
+-SRC_URI += "file://iotkit-comm-js.mdns.patch"
+-
+-PACKAGES =+ "${PN}-mdns"
+-FILES_${PN}-mdns += "${libdir}/node_modules/iotkit-comm/node_modules/mdns"
+-
+-do_install_append () {
+-    echo "YYYXXX ${FILES_${PN}-mdns}"
+-    echo "YYYXXX ${libdir}"
+-}
+diff -Naur iot-devkit-yp-poky-edison-20160606.orig/poky/meta-intel-iot-middleware/recipes-devtools/iotkit-comm-c/iotkit-comm-c_0.1.1.bb iot-devkit-yp-poky-edison-20160606/poky/meta-intel-iot-middleware/recipes-devtools/iotkit-comm-c/iotkit-comm-c_0.1.1.bb
+--- iot-devkit-yp-poky-edison-20160606.orig/poky/meta-intel-iot-middleware/recipes-devtools/iotkit-comm-c/iotkit-comm-c_0.1.1.bb	2016-05-11 21:56:42.000000000 +0200
++++ iot-devkit-yp-poky-edison-20160606/poky/meta-intel-iot-middleware/recipes-devtools/iotkit-comm-c/iotkit-comm-c_0.1.1.bb	1970-01-01 01:00:00.000000000 +0100
+@@ -1,111 +0,0 @@
+-DESCRIPTION = "Inter of Things communication library for device-to-device and device-to-cloud messaging"
+-LICENSE = "MIT"
+-
+-PR = "r2"
+-
+-SRC_URI = "git://github.com/intel-iot-devkit/iotkit-comm-c.git;protocol=https"
+-SRCREV = "ab59f523ee777dec9a80cf3e2df9caf508966498"
+-
+-LIC_FILES_CHKSUM = " \
+-        file://COPYING;md5=e8db6501ed294e65418a933925d12058 \
+-"
+-
+-S = "${WORKDIR}/git"
+-
+-DEPENDS = "zeromq mdns paho-mqtt iotkit-lib-c"
+-
+-inherit pkgconfig cmake
+-
+-do_configure() {
+-    cd ${B}/
+-    cmake ${S}/src
+-}
+-
+-do_compile() {
+-    cd ${B}/
+-    oe_runmake
+-}
+-
+-do_install() {
+-    # Copy the header files to /usr/include/iotkit-comm
+-    install -d ${D}${includedir}/iotkit-comm
+-    install -m 644 ${S}/src/lib/cJSON/cJSON.h ${D}${includedir}/iotkit-comm/
+-    install -m 644 ${S}/src/lib/iotkit-comm/iotkit-comm.h ${D}${includedir}/iotkit-comm/
+-    install -m 644 ${S}/src/lib/iotkit-comm/iotkit-comm_mdns.h ${D}${includedir}/iotkit-comm/
+-    install -m 644 ${S}/src/lib/iotkit-comm/util.h ${D}${includedir}/iotkit-comm/
+-
+-    # Copy the shared libraries to /usr/lib
+-    install -d ${D}${libdir}
+-    install ${B}/lib/iotkit-comm/libiotkit-comm.so ${D}${libdir}/
+-    install ${B}/lib/plugins/libenableiot/libenableiot-client.so ${D}${libdir}/
+-    install ${B}/lib/plugins/libenableiot/libenableiot-service.so ${D}${libdir}/
+-    install ${B}/lib/plugins/libmqttpubsub/libmqttpubsub-client.so ${D}${libdir}/
+-    install ${B}/lib/plugins/libmqttpubsub/libmqttpubsub-service.so ${D}${libdir}/
+-    install ${B}/lib/plugins/libzmqpubsub/libzmqpubsub-client.so ${D}${libdir}/
+-    install ${B}/lib/plugins/libzmqpubsub/libzmqpubsub-service.so ${D}${libdir}/
+-    install ${B}/lib/plugins/libzmqreqrep/libzmqreqrep-client.so ${D}${libdir}/
+-    install ${B}/lib/plugins/libzmqreqrep/libzmqreqrep-service.so ${D}${libdir}/
+-
+-    # Copy config files
+-    install -d ${D}${sysconfdir}/iotkit-comm
+-    install -m 644 ${S}/src/lib/iotkit-comm/config.json ${D}${sysconfdir}/iotkit-comm/
+-    cp -r ${S}/src/lib/iotkit-comm/plugin-interfaces ${D}${sysconfdir}/iotkit-comm/
+-
+-    # Copy the Sample apps
+-    install -d ${D}${datadir}/iotkit-comm
+-    install -d ${D}${datadir}/iotkit-comm/examples
+-    install -d ${D}${datadir}/iotkit-comm/examples/c
+-    cp -r ${S}/src/examples/enableiot-apps ${D}${datadir}/iotkit-comm/examples/c/
+-    cp -r ${S}/src/examples/zmq-apps ${D}${datadir}/iotkit-comm/examples/c/
+-    cp -r ${S}/src/examples/mqtt-apps ${D}${datadir}/iotkit-comm/examples/c/
+-    cp -r ${S}/src/examples/serviceQueries ${D}${datadir}/iotkit-comm/examples/c/
+-    cp -r ${S}/src/examples/serviceSpecs ${D}${datadir}/iotkit-comm/examples/c/
+-    cp -r ${S}/src/examples/distributed-thermostat ${D}${datadir}/iotkit-comm/examples/c/
+-    rm -rf ${D}${datadir}/iotkit-comm/examples/c/enableiot-apps/CMakeLists.txt
+-    rm -rf ${D}${datadir}/iotkit-comm/examples/c/mqtt-apps/CMakeLists.txt
+-    rm -rf ${D}${datadir}/iotkit-comm/examples/c/zmq-apps/CMakeLists.txt
+-    rm -rf ${D}${datadir}/iotkit-comm/examples/c/distributed-thermostat/CMakeLists.txt
+-    rm -rf ${D}${datadir}/iotkit-comm/examples/c/distributed-thermostat/doxygen.conf
+-    install ${B}/examples/distributed-thermostat/dashboard ${D}${datadir}/iotkit-comm/examples/c/
+-    install ${B}/examples/distributed-thermostat/sensor ${D}${datadir}/iotkit-comm/examples/c/
+-    install ${B}/examples/distributed-thermostat/thermostat ${D}${datadir}/iotkit-comm/examples/c/
+-    install ${B}/examples/enableiot-apps/enableiotclient ${D}${datadir}/iotkit-comm/examples/c/
+-    install ${B}/examples/enableiot-apps/enableiotservice ${D}${datadir}/iotkit-comm/examples/c/
+-    install ${B}/examples/mqtt-apps/subscriber ${D}${datadir}/iotkit-comm/examples/c/
+-    install ${B}/examples/mqtt-apps/publisher ${D}${datadir}/iotkit-comm/examples/c/
+-    install ${B}/examples/zmq-apps/zmqsubclient ${D}${datadir}/iotkit-comm/examples/c/
+-    install ${B}/examples/zmq-apps/zmqpubservice ${D}${datadir}/iotkit-comm/examples/c/
+-    install ${B}/examples/zmq-apps/zmqreqclient ${D}${datadir}/iotkit-comm/examples/c/
+-    install ${B}/examples/zmq-apps/zmqrepservice ${D}${datadir}/iotkit-comm/examples/c/
+-
+-    # Copy the invalid/valid config json files which are needed for Test programs
+-    install -d ${D}${datadir}/iotkit-comm/tests/
+-    install -d ${D}${datadir}/iotkit-comm/tests/c/
+-    install -d ${D}${datadir}/iotkit-comm/tests/c/libiotkit-comm
+-    cp ${S}/src/tests/libiotkit-comm/*.json ${D}${datadir}/iotkit-comm/tests/c/libiotkit-comm/
+-
+-    # Copy test programs
+-    cp ${B}/tests/CTestTestfile.cmake ${D}${datadir}/iotkit-comm/tests/c/
+-    install -d ${D}${datadir}/iotkit-comm/tests/c/mqttpubsub
+-    cp ${B}/tests/mqttpubsub/mqttpubsub* ${D}${datadir}/iotkit-comm/tests/c/mqttpubsub/
+-    cp ${B}/tests/mqttpubsub/CTestTestfile.cmake ${D}${datadir}/iotkit-comm/tests/c/mqttpubsub/
+-    install -d ${D}${datadir}/iotkit-comm/tests/c/zmqpubsub
+-    cp ${B}/tests/zmqpubsub/zmqpubsub_* ${D}${datadir}/iotkit-comm/tests/c/zmqpubsub/
+-    cp ${B}/tests/zmqpubsub/CTestTestfile.cmake ${D}${datadir}/iotkit-comm/tests/c/zmqpubsub/
+-    cp ${B}/tests/libiotkit-comm/mdns_* ${D}${datadir}/iotkit-comm/tests/c/libiotkit-comm/
+-    cp ${B}/tests/libiotkit-comm/iotkit-comm_* ${D}${datadir}/iotkit-comm/tests/c/libiotkit-comm/
+-    cp ${B}/tests/libiotkit-comm/CTestTestfile.cmake ${D}${datadir}/iotkit-comm/tests/c/libiotkit-comm/
+-    install -d ${D}${datadir}/iotkit-comm/tests/c/zmqreqrep
+-    cp ${B}/tests/zmqreqrep/zmqreqrep_* ${D}${datadir}/iotkit-comm/tests/c/zmqreqrep/
+-    cp ${B}/tests/zmqreqrep/CTestTestfile.cmake ${D}${datadir}/iotkit-comm/tests/c/zmqreqrep/
+-}
+-
+-FILES_${PN} += "${libdir}"
+-RDEPENDS_${PN} = "zeromq mdns paho-mqtt mosquitto sshpass iotkit-lib-c"
+-
+-PACKAGES += "${PN}-tests"
+-RDEPENDS_${PN}-tests += "${PN} gcov cmake"
+-
+-FILES_${PN}-dev = "${includedir} ${datadir}/iotkit-comm/examples/c/"
+-FILES_${PN}-dbg += "${datadir}/iotkit-comm/examples/c/.debug/ ${datadir}/iotkit-comm/tests/c/mqttpubsub/.debug/ ${datadir}/iotkit-comm/tests/c/zmqpubsub/.debug/ ${datadir}/iotkit-comm/tests/c/libiotkit-comm/.debug/ ${datadir}/iotkit-comm/tests/c/zmqreqrep/.debug/"
+-FILES_${PN}-tests += "${datadir}/iotkit-comm/tests/c/"
+diff -Naur iot-devkit-yp-poky-edison-20160606.orig/poky/meta-intel-iot-middleware/recipes-devtools/iotkit-comm-js/iotkit-comm-js_0.2.0.bb iot-devkit-yp-poky-edison-20160606/poky/meta-intel-iot-middleware/recipes-devtools/iotkit-comm-js/iotkit-comm-js_0.2.0.bb
+--- iot-devkit-yp-poky-edison-20160606.orig/poky/meta-intel-iot-middleware/recipes-devtools/iotkit-comm-js/iotkit-comm-js_0.2.0.bb	2016-05-13 11:00:50.000000000 +0200
++++ iot-devkit-yp-poky-edison-20160606/poky/meta-intel-iot-middleware/recipes-devtools/iotkit-comm-js/iotkit-comm-js_0.2.0.bb	1970-01-01 01:00:00.000000000 +0100
+@@ -1,99 +0,0 @@
+-DESCRIPTION = "Inter of Things communication library for device-to-device and device-to-cloud messaging"
+-LICENSE = "MIT"
+-
+-SRC_URI = "git://github.com/intel-iot-devkit/iotkit-comm-js.git;protocol=https"
+-SRCREV = "984c84e453088edac7b430dbee29b45ce078baad"
+-
+-LIC_FILES_CHKSUM = "file://COPYING;md5=e8db6501ed294e65418a933925d12058"
+-
+-S = "${WORKDIR}/git"
+-
+-DEPENDS = "nodejs-native zeromq mdns paho-mqtt iotkit-lib-c"
+-
+-do_compile () {
+-    # changing the home directory to the working directory, the .npmrc will be created in this directory
+-    export HOME=${WORKDIR}
+-
+-    # does not build dev packages
+-    npm config set dev false
+-
+-    # access npm registry using http
+-    npm set strict-ssl false
+-    npm config set registry http://registry.npmjs.org/
+-
+-    # configure http proxy if neccessary
+-    if [ -n "${http_proxy}" ]; then
+-        npm config set proxy ${http_proxy}
+-    fi
+-    if [ -n "${HTTP_PROXY}" ]; then
+-        npm config set proxy ${HTTP_PROXY}
+-    fi
+-
+-    # configure cache to be in working directory
+-    npm set cache ${WORKDIR}/npm_cache
+-
+-    # clear local cache prior to each compile
+-    npm cache clear
+-
+-    # compile and install  node modules in source directory
+-    npm --arch=${TARGET_ARCH} --verbose install
+-}
+-
+-do_install () {
+-    install -d ${D}${libdir}/node_modules/iotkit-comm/
+-    cp -r ${S}/node_modules ${D}${libdir}/node_modules/iotkit-comm/
+-    install -m 644 ${S}/package.json ${D}${libdir}/node_modules/iotkit-comm/
+-    install -m 644 ${S}/COPYING ${D}${libdir}/node_modules/iotkit-comm/
+-    install -m 644 ${S}/README.md ${D}${libdir}/node_modules/iotkit-comm/
+-    install -m 644 ${S}/jsdoc-conf.json ${D}${libdir}/node_modules/iotkit-comm/
+-    cp -r ${S}/lib ${D}${libdir}/node_modules/iotkit-comm/
+-    cp -r ${S}/test ${D}${libdir}/node_modules/iotkit-comm/
+-    cp -r ${S}/doc ${D}${libdir}/node_modules/iotkit-comm/
+-    install -d ${D}${datadir}/iotkit-comm/examples/node
+-    cp -r ${S}/example/* ${D}${datadir}/iotkit-comm/examples/node
+-
+-    chmod 755 ${D}${libdir}/node_modules/iotkit-comm/lib/setup.js
+-    install -d ${D}${bindir}
+-    ln -s ../lib/node_modules/iotkit-comm/lib/setup.js ${D}${bindir}/iotkit-comm
+-}
+-
+-INHIBIT_PACKAGE_STRIP = "1"
+-
+-PACKAGES = "${PN} ${PN}-test-dependencies"
+-
+-FILES_${PN}-mdns = "${libdir}/node_modules/iotkit-comm/node_modules/mdns"
+-
+-
+-FILES_${PN}-test-dependencies = " \
+-        ${libdir}/node_modules/iotkit-comm/node_modules/.bin/istanbul \
+-        ${libdir}/node_modules/iotkit-comm/node_modules/.bin/jsdoc \
+-        ${libdir}/node_modules/iotkit-comm/node_modules/.bin/mocha \
+-        ${libdir}/node_modules/iotkit-comm/node_modules/.bin/_mocha \
+-        ${libdir}/node_modules/iotkit-comm/node_modules/chai/ \
+-        ${libdir}/node_modules/iotkit-comm/node_modules/istanbul/ \
+-        ${libdir}/node_modules/iotkit-comm/node_modules/jsdoc/ \
+-        ${libdir}/node_modules/iotkit-comm/node_modules/mocha/ \
+-"
+-
+-FILES_${PN} = " \
+-        ${libdir}/node_modules/iotkit-comm/doc/ \
+-        ${libdir}/node_modules/iotkit-comm/jsdoc-conf.json \
+-        ${libdir}/node_modules/iotkit-comm/COPYING \
+-        ${libdir}/node_modules/iotkit-comm/lib/ \
+-        ${libdir}/node_modules/iotkit-comm/package.json \
+-        ${libdir}/node_modules/iotkit-comm/README.md \
+-        ${libdir}/node_modules/iotkit-comm/test \
+-        ${libdir}/node_modules/iotkit-comm/node_modules/.bin/mqtt_pub \
+-        ${libdir}/node_modules/iotkit-comm/node_modules/.bin/mqtt_sub \
+-        ${libdir}/node_modules/iotkit-comm/node_modules/async/ \
+-        ${libdir}/node_modules/iotkit-comm/node_modules/commander/ \
+-        ${libdir}/node_modules/iotkit-comm/node_modules/mdns2/ \
+-        ${libdir}/node_modules/iotkit-comm/node_modules/mqtt/ \
+-        ${libdir}/node_modules/iotkit-comm/node_modules/read/ \
+-        ${libdir}/node_modules/iotkit-comm/node_modules/zmq/ \
+-        ${datadir}/iotkit-comm/examples/ \
+-        ${bindir}/iotkit-comm \
+-"
+-
+-RDEPENDS_${PN} = "nodejs zeromq mdns paho-mqtt mosquitto sshpass iotkit-lib-c"
+-RDEPENDS_${PN}-test-dependencies = "${PN}"

@@ -11,7 +11,11 @@ ENV YOCTO=iot-devkit-yp-poky-edison-20160606
 
 #Use local .zip previously downloaded
 COPY $YOCTO.zip /home/edison/
+COPY patch-icedtea-checksums.diff /home/edison/
+COPY patch-iotkit-comm-removed.diff /home/edison/
 RUN	unzip $YOCTO.zip     && \
+	patch -p 0 < patch-icedtea-checksums.diff && \
+	patch -p 0 < patch-iotkit-comm-removed.diff && \
 	rm $YOCTO.zip        && \
 	mv $YOCTO/* ~/       && \
 	rmdir $YOCTO/
