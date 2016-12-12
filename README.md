@@ -42,7 +42,7 @@ Clone this repository using git:
 
 Alternatively, you could just grab the .zip archive containing the latest files [here](https://github.com/Squonk42/edison-yocto-docker/archive/master.zip), unzip it and renamed the "edison-yocto-docker-master" to "edison-yocto_docker".
 
-Another alternative if you have a good Internet connection is to fetch the final images containing all generated files directly from the Docker Hub:
+Another alternative if you have a good Internet connection is to fetch the final 22 GB image containing all generated files directly from the Docker Hub:
 
     $ docker pull squonk42/edison:latest
 
