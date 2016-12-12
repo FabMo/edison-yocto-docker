@@ -42,12 +42,16 @@ Clone this repository using git:
 
 Alternatively, you could just grab the .zip archive containing the latest files [here](https://github.com/Squonk42/edison-yocto-docker/archive/master.zip), unzip it and renamed the "edison-yocto-docker-master" to "edison-yocto_docker".
 
-Then run the build script using:
+Another alternative if you have a good Internet connection is to fetch the final images containing all generated files directly from the Docker Hub:
+
+    $ docker pull squonk42/edison:latest
+
+Otherwise, you will have to run the build script using:
 
     $ cd edison-yocto-docker
     $ source build.sh
 
-This should take ~5-6 hours on a modern Core i7 CPU with good Internet connection and a mechanical HD, faster if using an SSD drive, but you have time to take your favorite beverage.
+This should take ~5-6 hours on a modern Core i7 CPU with good Internet connection and a mechanical HD, faster if using an SSD drive, but you have time to take several of your favorite beverage!
 
 Eventually, you should be rewarded by an "All done" message.
 
