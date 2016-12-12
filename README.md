@@ -43,6 +43,7 @@ Clone this repository using git:
 Alternatively, you could just grab the .zip archive containing the latest files [here](https://github.com/Squonk42/edison-yocto-docker/archive/master.zip), unzip it and renamed the "edison-yocto-docker-master" to "edison-yocto_docker".
 
 Then run the build script using:
+
     $ cd edison-yocto-docker
     $ source build.sh
 
