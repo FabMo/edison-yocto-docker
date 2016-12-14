@@ -59,6 +59,10 @@ In order to retrieve the resulting binary file to Flash into the Edison module, 
 
     $ docker run squonk42/edison
 
+Or
+
+    $ docker run edison/image
+
 Find out its container ID by listing the running processes:
 
     $ docker ps -a
@@ -66,5 +70,96 @@ Find out its container ID by listing the running processes:
 Copy the file out of the container onto your local directory:
 
     $ docker cp CONTAINERID:/home/edison/toFlash.zip .
+
+Interactive Mode
+================
+
+It is of course possible to run the container and its image in interactive mode by launching a Bash into it:
+
+    $ docker ps -a
+    CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+    $ docker run -it squonk42/edison /bin/bash
+
+Or
+    $ docker run -it edison/image /bin/bash
+
+It is then almost like having a remote Shell on a distant machine:
+
+    edison@87dfd606823e:~$ ls
+    README.edison  build_edison  patch-icedtea-checksums.diff  patch-iotkit-comm-removed.diff  poky  toFlash.zip
+    edison@87dfd606823e:~$ uname -a
+    Linux 87dfd606823e 4.4.0-53-generic #74-Ubuntu SMP Fri Dec 2 15:59:10 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+    edison@87dfd606823e:~$ cat /etc/os-release
+    NAME="Ubuntu"
+    VERSION="14.04.5 LTS, Trusty Tahr"
+    ID=ubuntu
+    ID_LIKE=debian
+    PRETTY_NAME="Ubuntu 14.04.5 LTS"
+    VERSION_ID="14.04"
+    HOME_URL="http://www.ubuntu.com/"
+    SUPPORT_URL="http://help.ubuntu.com/"
+    BUG_REPORT_URL="http://bugs.launchpad.net/ubuntu/"
+    edison@87dfd606823e:~$ df
+    Filesystem     1K-blocks      Used Available Use% Mounted on
+    none           952861604 369330100 535105880  41% /
+    tmpfs            4028900         0   4028900   0% /dev
+    tmpfs            4028900         0   4028900   0% /sys/fs/cgroup
+    /dev/sdb2      952861604 369330100 535105880  41% /etc/hosts
+    shm                65536         0     65536   0% /dev/shm
+    edison@87dfd606823e:~$ ps
+      PID TTY          TIME CMD
+        1 ?        00:00:00 bash
+       13 ?        00:00:00 ps
+    edison@87dfd606823e:~$ ps -a
+      PID TTY          TIME CMD
+       14 ?        00:00:00 ps
+    edison@87dfd606823e:~$ id
+    uid=1000(edison) gid=1000(edison) groups=1000(edison)
+    edison@87dfd606823e:~$ exit
+    $ docker ps -a
+    CONTAINER ID        IMAGE               COMMAND             CREATED              STATUS                      PORTS               NAMES
+    87dfd606823e        squonk42/edison     "/bin/bash"         About a minute ago   Exited (0) 13 seconds ago                       agitated_engelbart
+
+... Except that all typed commands are recorded:
+
+    $ docker logs 87dfd606823e
+    edison@87dfd606823e:~$ ls
+    README.edison  build_edison  patch-icedtea-checksums.diff  patch-iotkit-comm-removed.diff  poky  toFlash.zip
+    edison@87dfd606823e:~$ uname -a
+    Linux 87dfd606823e 4.4.0-53-generic #74-Ubuntu SMP Fri Dec 2 15:59:10 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+    edison@87dfd606823e:~$ cat /etc/os-release
+    NAME="Ubuntu"
+    VERSION="14.04.5 LTS, Trusty Tahr"
+    ID=ubuntu
+    ID_LIKE=debian
+    PRETTY_NAME="Ubuntu 14.04.5 LTS"
+    VERSION_ID="14.04"
+    HOME_URL="http://www.ubuntu.com/"
+    SUPPORT_URL="http://help.ubuntu.com/"
+    BUG_REPORT_URL="http://bugs.launchpad.net/ubuntu/"
+    edison@87dfd606823e:~$ df
+    Filesystem     1K-blocks      Used Available Use% Mounted on
+    none           952861604 369330100 535105880  41% /
+    tmpfs            4028900         0   4028900   0% /dev
+    tmpfs            4028900         0   4028900   0% /sys/fs/cgroup
+    /dev/sdb2      952861604 369330100 535105880  41% /etc/hosts
+    shm                65536         0     65536   0% /dev/shm
+    edison@87dfd606823e:~$ ps
+      PID TTY          TIME CMD
+        1 ?        00:00:00 bash
+       13 ?        00:00:00 ps
+    edison@87dfd606823e:~$ ps -a
+      PID TTY          TIME CMD
+       14 ?        00:00:00 ps
+    edison@87dfd606823e:~$ id
+    uid=1000(edison) gid=1000(edison) groups=1000(edison)
+    edison@87dfd606823e:~$ exit
+
+You can then commit these changes into your image, or just drop every changes by removing the container (not the image!):
+
+    $ docker rm 87dfd606823e
+    87dfd606823e
+    $ docker ps -a
+    CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
 
 Now you will need to figure out how to modify the generated Yocto Edison distro!
