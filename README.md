@@ -81,7 +81,8 @@ It is of course possible to run the container and its image in interactive mode 
     $ docker run -it squonk42/edison /bin/bash
 
 Or
-    $ docker run -it edison/image /bin/bash
+
+$ docker run -it edison/image /bin/bash
 
 It is then almost like having a remote Shell on a distant machine:
 
