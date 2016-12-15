@@ -1,4 +1,4 @@
-# edison-yocto-docker
+U# edison-yocto-docker
 Building an Intel Edison Yocto Linux image using docker.
 
 This is a a [fork](https://github.com/hultqvist/edison-yocto-docker) that contains docker recipes for building the intel Edison firmware from the latest sources in Intel official Linux Yocto Project Snapshot "[iot-devkit-yp-poky-edison-20160606.zip](https://software.intel.com/en-us/iot/hardware/edison/downloads)".
@@ -45,6 +45,8 @@ Alternatively, you could just grab the .zip archive containing the latest files 
 Another alternative if you have a good Internet connection is to fetch the final 22 GB image containing all generated files directly from the Docker Hub:
 
     $ docker pull squonk42/edison:latest
+
+Having a 2MB/s downlink speed, this takes ~3 hours.
 
 Otherwise, you will have to run the build script using:
 
